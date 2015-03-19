@@ -38,27 +38,6 @@ quickSort l1
 	| l1 == [] = []
 	| otherwise = (quickSort(pegueMenores (tail l1) (head l1)))++((head l1):[])++ quickSort( (pegueMaiores (tail l1) (head l1)) ) 
 	
-	
-merge :: [Int] -> [Int] -> [Int]
-merge l1 l2
-	| (l1 == []) = l2
-	| (l2 == []) = l1 
-	| ( (head l1) > (head l2) ) = ( head(l1):[] )++( merge (tail l1) l2 )
-	| otherwise = ( head(l2):[] )++( merge l1 (tail l2) )
-
-
-
-mergeSort :: [Int] -> Int -> Int -> [Int]
-mergeSort l1 lo hi
-	| (l1 == []) = l1	
-	| ((lo+1)>=hi) = []
-	
-	
-	
-	
-
-
-
 
 
 	
