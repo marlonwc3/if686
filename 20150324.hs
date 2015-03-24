@@ -72,6 +72,101 @@ heapSort l1
 	
 	
 	
+-- SEGUNDA PARTE
+
+menorMaior :: Int -> Int -> Int -> (Int,Int)
+menorMaior a b c = (mergeSort([a,b,c])!!0 ,  mergeSort([a,b,c])!!2)
+
+
+ordernaTripla :: (Int, Int, Int) ->  (Int, Int, Int)
+ordernaTripla ( a, b, c ) = (mergeSort[a,b,c]!!0, mergeSort[a,b,c]!!1, mergeSort[a,b,c]!!2)
+
+type Ponto = (Float, Float)
+type Reta = (Ponto, Ponto)
+firstChord :: Ponto -> Float
+firstChord (a,b) = a
+
+secondChord :: Ponto -> Float
+secondChord (a,b) = b
+
+vertical :: Reta -> Bool
+vertical (a,b) = firstChord(a)==firstChord(b)
+
+--y = y1 + ( (x - x1)*(y2 - y1)/(x2 - x1) )
+-- Quando a reta eh vertical, firstChord(b) == firstChord(a), entao podera ocorrer divisao por 0
+pontoY :: Float -> Reta -> Float
+pontoY x (a,b) = secondChord(a) + (  ((x-firstChord(a))*(secondChord(b) - secondChord(a) ))/(firstChord(b) - firstChord(a) ) )
+
+
+doubleList xs = [2*a|a <- xs, (mod a 2) == 0]
+
+
+type Pessoa = String
+type Livro = String
+type BancoDados = [(Pessoa, Livro)]
+
+getPessoa :: (Pessoa, Livro) -> Pessoa
+getPessoa (a,b) = a
+getLivro :: (Pessoa, Livro) -> Pessoa
+getLivro (a,b) = b
+
+baseExemplo :: BancoDados
+baseExemplo = [("Sergio", "Livro 1"), ("Marlon", "Livro 2"), ("Fernando", "Livro 3"),  ("Tomer", "Livro 4"), ("Sergio", "Livro 5"), ("Carlos", "Livro 2")]
+
+
+livros :: BancoDados -> Pessoa -> [Livro]
+livros banco pessoa = [ getLivro(a)|a<- banco,  getPessoa(a) == pessoa]
+
+emprestimos :: BancoDados -> Livro -> [Pessoa]
+emprestimos banco livro = [ getPessoa(a)|a<- banco,  getLivro(a) == livro]
+
+
+emprestado :: BancoDados -> Livro -> Bool
+emprestado banco livro = length (emprestimos banco livro) > 0 
+
+qtdEmprestimos :: BancoDados -> Pessoa -> Int
+qtdEmprestimos banco pessoa = length (livros banco pessoa)
+
+emprestar :: BancoDados -> Pessoa -> Livro -> BancoDados
+emprestar banco pessoa livro  
+    | banco == []  = []
+    | emprestado banco livro  = banco 
+    | otherwise = banco++((pessoa, livro):[])
+
+temLivro :: [Livro] -> Livro -> Bool
+temLivro livros livro
+    | livros == []  = False 
+    | otherwise = ((head livros) == livro ) || temLivro (tail livros) livro
+
+
+devolver :: BancoDados -> Pessoa -> Livro -> BancoDados
+devolver banco pessoa livro  
+    | banco ==[] = []
+    | (temLivro (livros banco pessoa) livro) == False = banco
+    | otherwise = [ a|a<- banco, ((getPessoa(a) == pessoa) == False) || ((getLivro(a) == livro) == False) ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
 	
 	
 	
