@@ -146,6 +146,10 @@ devolver banco pessoa livro
     | otherwise = [ a|a<- banco, ((getPessoa(a) == pessoa) == False) || ((getLivro(a) == livro) == False) ]
 
 
+--QUICKSORT 
+quickSort :: [Int] -> [Int]
+quickSort [] = []
+quickSort (h:t) =  quickSort([ a|a <- t, a < h  ])++(h:[])++quickSort([ a|a <- t, a >= h  ])
 
 
 
