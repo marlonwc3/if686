@@ -87,4 +87,74 @@ eqSet setA setB
 	where setC = removeEquals setA []; setD = removeEquals setB []; setE = [ a|a <- setC , exist setD a ]
 	
 	
+	
+-- PARTE DA AULA --
+
+
+
+myTake :: Int -> [a] -> [a]
+myTake 0 lista = lista 
+myTake n lista
+	| n >= (length lista) = lista
+	| otherwise = (h:[])++(myTake (n-1) t) 
+	where h = head lista; t = tail lista;
+
+myDrop :: Int -> [a] -> [a]
+myDrop 0 lista = lista
+myDrop n lista 
+	| n >= (length lista) = lista
+	| otherwise = (myDrop (n-1) t) 
+	where h = head lista; t = tail lista;
+
+myTakeWhile :: [a] -> (a -> Bool) -> [a]		
+myTakeWhile [] f = []
+myTakeWhile lista f 
+	| f(h) == False = [] 
+	| otherwise = (h:[])++( myTakeWhile t f)
+	where h = head lista; t = tail lista;
+
+myDropWhile :: [a] -> (a -> Bool) -> [a]		
+myDropWhile [] f = []
+myDropWhile lista f 
+	| f(h) == False = t
+	| otherwise = ( myDropWhile t f)
+	where h = head lista; t = tail lista;
+
+
+quickSort :: (Ord x) => [x] -> [x]
+quickSort [] = []
+quickSort (h:t) =  quickSort([ a|a <- t, a < h  ])++(h:[])++quickSort([ a|a <- t, a >= h  ])
+
+
+qnt :: (Eq t) => [t] -> t -> Int
+qnt [] x = 0
+qnt lista x 
+	| h==x = 1 + (qnt t x)
+	| otherwise = (qnt t x)
+	where h = head lista; t = tail lista;
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
 
