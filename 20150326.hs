@@ -60,22 +60,21 @@ remove :: Hash -> Key -> Hash -- O(basePrime)
 remove hash key = pvt_remove hash (getEvaluate key) 
 
 
--- Parte 2 ( Igualdade de conjuntos ) 
-type Set = [Int]
-type Element = Int
 
-exist :: Set -> Element -> Bool -- O(n) 
+-- Parte 2 ( Igualdade de conjuntos ) 
+
+exist :: (Eq t) => [t] -> t -> Bool -- O(n) 
 exist set element = length ( [ a|a <- set , a == element  ] ) > 0
 
 --equal :: Set -> Set -> Bool
-removeEquals :: Set -> Set -> Set -- O(n²)
+removeEquals :: (Eq t) => [t] -> [t] -> [t] -- O(n²)
 removeEquals [] res = res
 removeEquals (h:t) res 
 	| exist res h = removeEquals t res
 	| otherwise = removeEquals t (res++(h:[]))
 
 
-eqSet :: Set -> Set -> String -- O(n²)
+eqSet :: (Eq t) => [t] -> [t] -> String -- O(n²)
 eqSet setA setB 
 	| (((length setE) == (length setC)) && ((length setE) > (length setD))) = "A contem B"
 	| (((length setE) == (length setD)) && ((length setE) < (length setC))) = "A contem B"			
@@ -86,31 +85,6 @@ eqSet setA setB
 --	| (((length setE) < (length setD)) && ((length setE) < (length setC))) = "A interseciona B"
 	| otherwise = "A interseciona B"
 	where setC = removeEquals setA []; setD = removeEquals setB []; setE = [ a|a <- setC , exist setD a ]
+	
+	
 
-	
-
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
