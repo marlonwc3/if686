@@ -133,7 +133,29 @@ qnt lista x
 	| otherwise = (qnt t x)
 	where h = head lista; t = tail lista;
 	
+--Ultima questao do slide
 
+insert :: Eq t => [(t, Int)] -> t -> [(t, Int)]
+insert [] v = [(v,1)]
+insert (h:t) v 
+	| ((fst h) == v) = ([( fst h, (snd h) + 1)])++t
+	| otherwise = [h]++(insert t v)
+
+insertAll :: Eq t => [t] -> [(t, Int)] -> [(t, Int)]
+insertAll [] res = res
+insertAll (h:t) res = insertAll t (insert res h)
+
+listTest :: [String]
+listTest = ["abba", "ccc", "abc", "def", "z", ""]
+
+pvt_agrupar :: Eq t => [[t]] -> [(t, Int)] -> [(t, Int)]
+pvt_agrupar [] res = res
+pvt_agrupar (h:t) res = pvt_agrupar t (insertAll h res)
+
+agrupar :: Eq t => [[t]] -> [(t,Int)]
+agrupar lista = pvt_agrupar lista []
+
+	
 
 
 
