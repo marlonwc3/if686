@@ -1,6 +1,13 @@
 {- 
 1ª) 
-O polimorfismo de haskell é mais seguro quanto a garantia de que os tipos terão implementações das funcionalidades que serão utilizadas sob eles, pois é possível restringir que os argumentos genéricos possuam implementações de determinadas funções, sendo esses definidos por uma classe. Em Java, o Generics que é utilizado no polimorfismo acaba sendo mais geral pois não restringe os dados, porém é mais sucetível à erro tendo em vista que apenas ocorre uma verificação de tipo em tempo de execução e depois ocorre um "type erasure" para gerar compatibilidade com as JVM antigas, pois Generics foi adicionada a partir do Java 5.
+O polimorfismo de haskell é mais seguro quanto a garantia de
+que os tipos terão implementações das funcionalidades que serão 
+utilizadas sob eles, pois é possível restringir que os argumentos genéricos 
+possuam implementações de determinadas funções, sendo esses definidos por uma
+classe. Em Java, o Generics que é utilizado no polimorfismo acaba sendo mais 
+geral pois não restringe os dados, porém é mais sucetível à erro tendo em vista que
+apenas ocorre uma verificação de tipo em tempo de execução e depois ocorre um "type erasure"
+para gerar compatibilidade com as JVM antigas, pois Generics foi adicionada a partir do Java 5.
 -}
 
 -- 2ª
