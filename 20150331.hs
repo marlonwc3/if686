@@ -117,31 +117,48 @@ baseMark :: [Int]
 baseMark = genMark (( length baseAdjList )+3) 
 
 
+-- 4ª Questao 
+-- uso: filtroMediana matrix n 
+
+-- ordenar a lista da mediana
+quickSort :: (Ord x) => [x] -> [x]
+quickSort [] = []
+quickSort (h:t) =  quickSort([ a|a <- t, a < h  ])++(h:[])++quickSort([ a|a <- t, a >= h  ])
+
+mediana :: [Int] -> Int
+mediana [] = 0
+mediana mylist
+	| (mod (length lista) 2) == 1 = lista!!( (div (length lista) 2)  ) 
+	| otherwise = div ((lista!!(div (length lista) 2 ))+(lista!!( (div (length lista) 2)-1  ) )) 2
+	where lista = quickSort mylist
+
+iterOver :: [x] -> Int -> Int -> [x]
+iterOver [] a b = []
+iterOver lista a b
+	| a > b || b<= 0 ||  ( a > (length lista )) = []
+	| a <= 0 = (iterOver lista (a+1) b)	
+	| otherwise = ([lista!!(a-1)])++(iterOver lista (a+1) b)
+
+getAll :: [[Int]] ->  [Int]
+getAll [] = []
+getAll (h:t) = h++(getAll t)
+
+getMediana :: [[Int]] -> Int -> Int -> Int -> Int
+getMediana matrix i j n = mediana all
+	where rows = (iterOver matrix (i-(n-1)) (i+(n-1))); cols = [ (iterOver a (j-(n-1)) (j+(n-1))) |a <- rows  ]; all = getAll cols
 
 
+pvt_filtroMediana :: [[Int]] -> Int -> Int -> Int -> [Int] -> [[Int]]
+pvt_filtroMediana [] i j n col = []
+pvt_filtroMediana matrix i j n col
+	| j > (length (matrix!!0)) = ([col])++(pvt_filtroMediana matrix (i+1) 1 n [] ) 
+	| i > (length matrix ) = []
+	| otherwise = pvt_filtroMediana matrix i (j+1) n colAux
+	where med = (getMediana matrix i j n); colAux = col++[med]
 
+filtroMediana :: [[Int]] -> Int -> [[Int]]
+filtroMediana matrix n = pvt_filtroMediana matrix 1 1 n []
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+baseMatrix :: [[Int]] 
+baseMatrix = [[1,2,3],[4,5,6], [7,8,9]]
 
