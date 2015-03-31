@@ -60,21 +60,19 @@ uma maneira de deixar mais genérico seria preprocessar uma lista de lista de r�
 
 Usando: search grafo src dst
 -}
-
-type Rotule = Char -- Tipo do rótulo 
-type GraphValues = [Rotule] 
-type NodeId = Int
-type AdjList = [[NodeId]]
-type Graph = (AdjList, GraphValues)
+type Rotule n = n -- Tipo do rótulo 
+type GraphValues n = [Rotule n] 
+type AdjList = [[Int]]
+type Graph n = (AdjList, GraphValues n)
 
 -- 1-indexed
-pvt_get :: GraphValues -> Rotule -> NodeId
+pvt_get :: Eq n => [n] -> n -> Int
 pvt_get [] r = -10000000
 pvt_get (h:t) r
 	| h == r = 1
 	| otherwise = 1 + (pvt_get t r)
 
-setMark :: [Int] -> NodeId -> Int -> [Int]
+setMark :: [Int] -> Int -> Int -> [Int]
 setMark [] id v = []
 setMark	 mark id v = (take (id-1) mark)++([v])++(drop id mark)
 
@@ -82,7 +80,7 @@ genMark :: Int -> [Int]
 genMark 0 = []
 genMark n = ([0])++(genMark (n-1) )
 
-pvt_search :: AdjList -> [Int] -> NodeId -> NodeId -> [NodeId]
+pvt_search :: AdjList -> [Int] -> Int -> Int -> [Int]
 pvt_search [] mark src dst = []
 pvt_search adjList mark src dst
 	| src == dst = [dst]
@@ -91,12 +89,12 @@ pvt_search adjList mark src dst
 	| otherwise = ([src])++(allPaths!!0)
 	where myAdjList = adjList!!(src-1); myMark = (setMark mark src 1) ; possibles = [ pvt_search adjList myMark a dst |a<-myAdjList, (myMark!!(a-1))==0   ]; allPaths = [ a|a <- possibles, length a > 0]
 
-mapPath :: GraphValues -> [NodeId] -> [Rotule]
+mapPath :: Eq n => [n] -> [Int] -> [n]
 mapPath [] path = []
 mapPath graphValues [] = []
 mapPath graphValues (h:t) =  ([graphValues!!(h-1)])++(mapPath graphValues t)
 
-search :: Graph -> Rotule -> Rotule -> [Rotule] -- função de uso
+search :: Eq n => ([[Int]], [n]) -> n -> n -> [n] -- função de uso
 search graph src dst
 	| srcMap < 0 || dstMap < 0 = []
 	| (fst graph == []) = []
@@ -107,15 +105,15 @@ search graph src dst
 baseAdjList :: AdjList
 baseAdjList = [ [4,2], [1,3], [2, 5 , 6], [1], [3, 6], [3, 5], [8], [7] ] 
 
-baseGraphValues :: GraphValues
-baseGraphValues = "ABCDEFGH"
+baseGraphValues :: Eq n => [n] -> [n]
+baseGraphValues a = a
 
-baseGraph :: Graph
-baseGraph = (baseAdjList, baseGraphValues)
+baseGraph ::Eq n => ([[Int]], [n]) -> ([[Int]], [n])
+baseGraph a = a	
 
 baseMark :: [Int]
 baseMark = genMark (( length baseAdjList )+3) 
-
+	
 
 -- 4ª Questao 
 -- uso: filtroMediana matrix n 
