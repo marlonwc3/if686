@@ -130,20 +130,30 @@ mediana mylist
 	| otherwise = div ((lista!!(div (length lista) 2 ))+(lista!!( (div (length lista) 2)-1  ) )) 2
 	where lista = quickSort mylist
 
-iterOver :: [x] -> Int -> Int -> [x]
-iterOver [] a b = []
-iterOver lista a b
+iterOverRows :: [[Int]] -> Int -> Int -> [[Int]]
+iterOverRows [] a b = []
+iterOverRows lista a b
 	| a > b || b<= 0 ||  ( a > (length lista )) = []
-	| a <= 0 = (iterOver lista (a+1) b)	
-	| otherwise = ([lista!!(a-1)])++(iterOver lista (a+1) b)
+	| a <= 0 = (iterOverRows lista (a+1) b)	
+	| otherwise = ([lista!!(a-1)])++(iterOverRows lista (a+1) b)
+	
+iterOverCols :: [Int] -> Int -> Int -> [Int]
+iterOverCols [] a b = []
+iterOverCols lista a b
+	| a > b || b<= 0 ||  ( a > (length lista )) = []
+	| a <= 0 = [0]++(iterOverCols lista (a+1) b)	
+	| otherwise = ([lista!!(a-1)])++(iterOverCols lista (a+1) b)	
 
 getAll :: [[Int]] ->  [Int]
 getAll [] = []
 getAll (h:t) = h++(getAll t)
 
 getMediana :: [[Int]] -> Int -> Int -> Int -> Int
-getMediana matrix i j n = mediana all
-	where rows = (iterOver matrix (i-(n-1)) (i+(n-1))); cols = [ (iterOver a (j-(n-1)) (j+(n-1))) |a <- rows  ]; all = getAll cols
+getMediana matrix i j n 
+    | ( (i-(n-1)) <= 0 ) || ( (j-(n-1)) <= 0 ) || ((i+(n-1)) > (length matrix)) || ((j+(n-1)) > (length matrix) ) = 0
+    |otherwise = mediana all
+	where rows = (iterOverRows matrix (i-(n-1)) (i+(n-1))); cols = [ (iterOverCols a (j-(n-1)) (j+(n-1))) |a <- rows  ]; all = getAll cols
+
 
 
 pvt_filtroMediana :: [[Int]] -> Int -> Int -> Int -> [Int] -> [[Int]]
@@ -155,8 +165,20 @@ pvt_filtroMediana matrix i j n col
 	where med = (getMediana matrix i j n); colAux = col++[med]
 
 filtroMediana :: [[Int]] -> Int -> [[Int]]
-filtroMediana matrix n = pvt_filtroMediana matrix 1 1 n []
+filtroMediana matrix n = pvt_filtroMediana matrix 1 1 (n-1) []
 
 baseMatrix :: [[Int]] 
-baseMatrix = [[1,2,3],[4,5,6], [7,8,9]]
+baseMatrix = [[9,4,5,0,8],[10,3,2,1,7], [9,1,6,3,15], [0,3,8,10,1], [1,16,9,12,7]]
+
+{-
+getMediana baseMatrix 3 2 2
+getCols baseMatrix 3 2 2
+getRows baseMatrix 3 2 2
+filtroMediana baseMatrix 3
+-}
+
+
+
+
+
 
