@@ -13,7 +13,7 @@ baseGraph = Graph [[(2,5),(3,1), (6,5)], [(4,2)], [(4,3),(5,1)], [(1,2)], [(3,4)
 
 {-2ª Questao -}
 
--- retorna o 1º array de bool com todos os elementos de indices contidos no vetor de int iguais a true (e preserva os antigos).
+-- retorna a 1º lista de bool com todos os elementos de indices contidos na lista de int iguais a true (e preserva os antigos).
 markAdjs :: [Bool] -> [Int] -> [Bool]
 markAdjs mark [] = mark
 markAdjs mark (h:t) = markAdjs ((take (h-1) mark)++[True]++(drop h mark)) t 
