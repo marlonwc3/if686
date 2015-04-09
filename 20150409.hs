@@ -1,3 +1,39 @@
+-- Questoes da aula
+
+-- Questões da aula
+
+mymap' :: (Int -> Int) -> [Int] -> [Int]
+mymap' f [] = []
+mymap' f (h:t) = f h : mymap' f t
+
+mysqr :: Int -> Int
+mysqr a = a*a
+
+mymap :: (t -> u) -> [t] -> [u] 
+mymap f x = [ f a | a<- x ]
+
+pos :: Char -> Int
+pos c 
+    | fromEnum(c) >= 97 = fromEnum(c) - fromEnum('a') + 1
+    | otherwise = fromEnum(c) - fromEnum('A') + 1
+    
+-- mymap pos "marlon"
+
+
+foldr' :: ( t -> u -> u ) -> u -> [t] -> u
+foldr' f s [] = s
+foldr' f s (h:t) = f h (foldr' f s t)
+
+{-
+member' :: Eq a => a -> [a] -> Bool
+member' = foldr' 
+-}
+
+
+
+
+-- TRABALHO
+
 {- 1ª Questão:  -} 
 {-
 	Graph [[(Int, Int)]] [t] deriving (Show, Eq)
@@ -94,7 +130,6 @@ bfs (Graph adjList values) x = whileBfs (Graph adjList values) x [False | a <- a
 
 -- ex: bfs baseGraph "X"
 
- 
  
  
  
