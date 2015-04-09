@@ -3,7 +3,10 @@
 	Graph [[(Int, Int)]] [t] deriving (Show, Eq)
 	[[(Int, Int)]] == lista de adjacência de cada nó , fst == adjacente, snd == peso
 	[t] == lista dos valores de cada nó
-	Eu mapeio cada no, independente do valor do elemento em inteiros pois fica mais facil de trabalhar, se eu fosse criar uma função que insere ela teria um contador que identificaria unicamente cada elemento do do grafo e assinalaria o elemento inserido a esse contador, que no caso é o índice nas duas listas.
+	Eu mapeio cada no, independente do valor do elemento em inteiros pois fica mais facil de
+	trabalhar, se eu fosse criar uma função que insere ela teria um contador que identificaria 
+	unicamente cada elemento do do grafo e assinalaria o elemento inserido a esse contador, 
+	que no caso é o índice nas duas listas.
 -}
 data Graph t = Empty | Graph [[(Int, Int)]] [t] deriving (Show, Eq)
 
@@ -14,7 +17,9 @@ baseGraph = Graph [[(2,5),(3,1), (6,5)], [(4,2)], [(4,3),(5,1)], [(1,2)], [(3,4)
 
 {-2ª Questao -}
 
--- retorna a 1º lista de bool com todos os elementos de indices contidos na lista de int iguais a true (e preserva os antigos).
+{- retorna a 1º lista de bool com todos os elementos de indices contidos na lista de int iguais
+   a true (e preserva os antigos).
+-}
 markAdjs :: [Bool] -> [Int] -> [Bool]
 markAdjs mark [] = mark
 markAdjs mark (h:t) = markAdjs ((take (h-1) mark)++[True]++(drop h mark)) t 
@@ -24,7 +29,8 @@ markAdjs mark (h:t) = markAdjs ((take (h-1) mark)++[True]++(drop h mark)) t
 	chama a recursao para 1 adjacente,
 	quando esse adjacente terminar sua execucao, ele retomara a chamada para seu pai (que eh o no atual)
 	eh retornada a nova lista dos nós marcados após sua recursão,
-	toda a execução da dfs é feita numa "lista de recursões" encadeadas, pois nessa implementação não ocorre backtracking.
+	toda a execução da dfs é feita numa "lista de recursões" encadeadas, pois nessa implementação 
+	não ocorre backtracking.
 -}
 pvt_dfs :: Eq t => Show t => Graph t -> t -> Int -> Int ->  [Bool] -> (Bool, [Bool])
 pvt_dfs (Empty) x no pai mark = (False, mark)
