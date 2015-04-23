@@ -34,6 +34,38 @@ let f = listPartitioner [4, 13, 8]
 f [1..15]
 -}
 
+-- EXERCICIOS DA AULA -- 
+
+mapFilter :: (a -> b ) -> (a -> Bool ) -> [a] -> [b]
+mapFilter f g l = [f a | a <- l , g a ]
+
+-- \m -> 3 + m
+
+addNum n = (\m -> n+m)
+firstOnes lista = (\n -> take n lista )
+
+maioresQue listas = (\n -> [a | a <- listas , (length a) >n  ]  )
+
+
+myexist [] = (\x -> False ) 
+myexist (h:t) = (\x -> (h==x ) || ( myexist t x) )
+
+juntar [] = (\x -> x) 
+juntar (h:t)  = (\x -> juntar t (x++h))  
+
+myuni (h:t)  = (\x -> myexist x h)
+
+remDup :: Eq a => [a] -> [a] -> [a] 
+remDup [] ans = ans
+remDup (h:t) ans
+	| myexist ans h = remDup t ans 
+	| otherwise = remDup t (ans++[h])
+	
+	
+myUni :: Eq a =>  [[a]] -> [a] 
+myUni l = remDup (juntar l [] ) [] 
+ 
+ 
 
 
 
