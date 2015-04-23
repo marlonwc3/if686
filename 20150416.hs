@@ -65,7 +65,46 @@ remDup (h:t) ans
 myUni :: Eq a =>  [[a]] -> [a] 
 myUni l = remDup (juntar l [] ) [] 
  
- 
+pvt_mapFoldr :: (a -> b -> b) -> b -> [a] -> b
+pvt_mapFoldr f base [] = base
+pvt_mapFoldr f base (h:t) = f h (pvt_mapFoldr f base t)
+
+mapFoldr :: (b->c) -> (a -> b -> b) -> b -> [a] -> c
+mapFoldr g f base l = g (pvt_mapFoldr f base l)
+
+
+-- Exercicio 1 
+sumAll l x = map (+x) l 
+
+-- Exercicio 2
+maiorValor :: ([Int] -> Int )
+maiorValor  = (\x -> foldr max (-99999999) x)  
+
+-- Exercicio 3
+data Tree t = Nil | Node t (Tree t) (Tree t)
+
+iso :: Tree t -> Tree t -> Bool
+iso Nil Nil = True
+iso Nil (Node a left right) = False
+iso (Node a left right) Nil = False
+iso (Node a la lb) (Node b lc ld) = ( (iso la lc) && (iso lb ld) ) || ( (iso lb lc) && (iso la ld) )
+
+gera :: Tree t -> (Tree t -> Bool ) 
+gera a = (iso a )
+
+
+-- Exercicio 4
+
+parear :: [a] -> [b] -> [(a,b)]
+parear [] lb = []
+parear la [] = []
+parear (ha:ta) (hb:tb) = [(ha,hb)]++( parear ta tb  )
+
+gerarPar :: [a] -> ([b] -> [(a,b)])
+gerarPar l = (parear l) 
+
+-- let a = gerarPar [1,2,3,4]
+
 
 
 
