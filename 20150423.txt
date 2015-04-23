@@ -1,3 +1,4 @@
 Faltavam:
+	- Faltou o slide da 1ª aula do curso ( não fui pra 1ª aula, só lembrei de fazer hoje )
 	- No slide da aula 5: Os exercícios dos 3 slides finais.
 	- No slide da aula 6: Os exercícios do 3º slide.
