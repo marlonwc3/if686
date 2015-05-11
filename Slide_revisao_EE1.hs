@@ -89,6 +89,7 @@ isOkay :: String -> Bool
 isOkay [] = True
 isOkay (h:t) = ((h >= 'a') && (h <= 'z') ) && (isOkay t)
 
+-- Questao da cifra de cesar 
 type Path = String
 
 rot :: Char -> Char
@@ -113,5 +114,43 @@ mymain = do {
 
 	putStrLn "Operacao finalizada";	
 }
+
+
+-- Tour do cavalo num tabuleiro nxn 
+put :: [t] -> t -> Int -> [t] 
+put l v p = (take (p-1) l)++[v]++(drop p l)
+
+desloc :: Int -> Int -> Int -> [(Int, Int)]
+desloc n x y = [ (a,b) | (a,b) <-[ (x-2, y-1), (x-2, y+1), (x-1, y+2), (x+1, y+2), (x+2,y+1), (x+2,y-1), (x+1, y-2), (x-1, y-2)] ,  (a > 0) && (b > 0) && ( a <= n) && ( b<= n)  ]
+
+full :: Int -> [[Bool]] -> Int -> Int -> Bool
+full n mat a b  
+	| a > n = True
+	| b > n = full n mat (a+1) 1
+	| otherwise = ((mat!!(a-1))!!(b-1)) && (full n mat a (b+1))
+
+pvt_go :: Int -> Int -> Int -> [[Bool]] -> [(Int, Int)]
+pvt_go n x y state
+	| (full n state 1 1) = [(x, y)]
+	| (length desVal) == 0 = []
+	| (length retNovo) >0 = [(x,y)]++(retNovo!!0)
+	| otherwise = []
+	where des = desloc n x y; desVal = [(a,b) | (a,b) <- des,  not ((state!!(a-1))!!(b-1)) ]; ret = [ pvt_go n a b (put state (put (state!!(a-1)) True b) a) | (a,b) <- desVal  ]; retNovo = [a | a <- ret, (length a) > 0 ]
+
+gen :: Int -> Int -> Int -> [(Int, Int)]
+gen n a b  
+	| a > n = []
+	| b > n = gen n (a+1) 1
+	| otherwise = [(a,b)]++(gen n a (b+1) )
+
+forEach :: Int -> [(Int, Int)] -> [(Int, Int)] 
+forEach n [] = [] 
+forEach n (h:t)
+	| (length ret) > 0 = ret
+	| otherwise = forEach n t
+	where ret = pvt_go n (fst h) (snd h) [ [(a==(fst h)) && (b==(snd h) ) | a <- [1..n] ] | b <- [1..n] ];
+
+go :: Int -> [(Int, Int)]
+go n = forEach n (gen n 1 1) 
 
 
