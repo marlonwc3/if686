@@ -1,125 +1,69 @@
-package slide12;
-
-import java.util.ArrayList;
-import java.util.Queue;
+import java.util.PriorityQueue;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-class Objeto{
-	int x, t;
-	public Objeto(){}
-	public Objeto(int x, int t){ this.x = x; this.t = t;}
-	public String toString() {
-		return("[Objeto , criado pela thread: " + t + " | val: " + x);
-	}
-}
-
-class SafeQueueWithSync {
-	private ArrayList<Objeto> queue = new ArrayList<>();
-	public void push(int s, int id){
-		synchronized (queue) {
-			System.out.println("Thread  ("+id+") inseriou val: " + s);
-			this.queue.add(new Objeto(s, id) );
-		}
-	}
-	public Objeto pop() throws Exception{
-		synchronized (queue) {
-			if(this.queue.isEmpty()) {
-				throw new Exception("Fila vazia");
-			}
-			return this.queue.remove(0);
-		}
-	}
-}
-class T1 extends Thread{
-	static SafeQueueWithSync s = new SafeQueueWithSync();
-	private int id;
-	public T1(int id){this.id= id;}
+class T1 extends Thread{ 
+	int id, x;
+	public T1(){}
+	public T1(int id, int x){this.id = id; this.x = x;  }
 	public void run(){
-		Random r = new Random();
-		for(int i = 0 ; i < 10; i++){
-			s.push(r.nextInt(100), id);
-		}
-		Objeto o;
-		for(int i  = 0; i< 10; i++){
-			try {
-				o = s.pop();
-				System.out.println("Thread ("+id+") removeu: " + o);				
-			} catch (Exception e) {
-				System.out.println("Thread ("+id+") encontrou lista vazia");				
+		TestPriorityAcess.acess(x, id);
+	}
+}
+
+public class TestPriorityAcess {
+	static PriorityQueue<Integer> heap = new PriorityQueue<>();
+	static int NEXT = 1;
+	static String strIn="", strOut="", strMid ="";
+	
+	// Threads entraram na região B na mesma ordem em que entraram em A
+	static private int tryAcess(int id, int myNext){
+		
+		if(myNext == -1 ) { 
+			synchronized (TestPriorityAcess.class) {  // Região A
+				 myNext = NEXT++;
+				 heap.add(myNext);
+				 strIn += "T["+id+"]"+"#";
 			}
+		}	
+		
+		// região não crítica 
+
+		synchronized (TestPriorityAcess.class) {  // Região B
+			synchronized(heap) {  
+				int boy = heap.element(); 
+				if(boy != myNext) return myNext; 
+				heap.remove();
+			};
+			strOut += "T["+id+"]"+"#";
 		}
-	}	
-} 
+		return 0;
+	}
 
-
-class SafeQueueWithoutSync {
-	public Vector<T2> threads;
-	private ArrayList<Objeto> queue = new ArrayList<>();
-	public AtomicBoolean canAcess; 
-	public SafeQueueWithoutSync(Vector<T2> threads) {
-		this.threads = threads;
+	static public void acess(int x, int id) {
+		int myNext = -1;
+		while(myNext != 0 ){
+			myNext = tryAcess(id, myNext);
+		}
 	}
 	
-	public void push(int s, int id){
-		while(canAcess.getAndSet(true)){
-			try {
-				this.threads.get(id).sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		System.out.println("Thread  ("+id+") inseriou val: " + s);
-		this.queue.add(new Objeto(s, id) );
-		canAcess.set(false);
-	}
-	public Objeto pop() throws Exception{
-		synchronized (queue) {
-			if(this.queue.isEmpty()) {
-				throw new Exception("Fila vazia");
-			}
-			return this.queue.remove(0);
-		}
-	}
-}
-class T2 extends Thread{
-	static SafeQueueWithSync s = new SafeQueueWithSync();
-	private int id;
-	public T2(int id){this.id= id;}
-	public void run(){
-		Random r = new Random();
-		for(int i = 0 ; i < 10; i++){
-			s.push(r.nextInt(100), id);
-		}
-		Objeto o;
-		for(int i  = 0; i< 10; i++){
-			try {
-				o = s.pop();
-				System.out.println("Thread ("+id+") removeu: " + o);				
-			} catch (Exception e) {
-				System.out.println("Thread ("+id+") encontrou lista vazia");				
-			}
-		}
-	}	
-} 
-
-
-public class Exercicio1 extends Thread{
-
 	public static void main(String[] args) {
-		int N = 5;
-		Vector<T1> v = new Vector<>();
-		for(int i = 0; i < N; i++) {
-			v.addElement(new T1(i));
-			v.lastElement().start();
+		int N = 500;
+		Vector<T1> threads = new Vector<>();
+		Random r = new Random();
+		for(int i = 0 ; i < N; i++){
+			threads.add(new T1(i, r.nextInt(50) + 50));
+			threads.lastElement().start();
 		}
-		for(int i = 0; i < N; i++) try{v.get(i).join();}catch(Exception e) {e.printStackTrace();}
+		for( int i = 0; i < N; i++) try{threads.get(i).join();} catch(Exception e){e.printStackTrace();}
+		//System.out.println(strIn);
+		//System.out.println();
+		//System.out.println(strOut);
+		System.out.println("Iguais: " + strIn.equals(strOut));
 		
-		
-		
-	
 	}
+
 }
+
+
