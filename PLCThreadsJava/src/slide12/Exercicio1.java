@@ -15,7 +15,7 @@ class Objeto{
 	}
 }
 
-class SafeQueue {
+class SafeQueueWithSync {
 	private ArrayList<Objeto> queue = new ArrayList<>();
 	public void push(int s, int id){
 		synchronized (queue) {
@@ -34,7 +34,7 @@ class SafeQueue {
 }
 
 public class Exercicio1 extends Thread{
-	static SafeQueue s = new SafeQueue();
+	static SafeQueueWithSync s = new SafeQueueWithSync();
 	private int id;
 	public Exercicio1(int id){this.id= id;}
 	
