@@ -64,7 +64,9 @@ class SafeList{
 			b1 = listLock[a].tryLock();
 			b2 = listLock[b].tryLock();
 			if(b1 && b2 ) {
-				list[a]^=list[b]^=list[a];
+				int aux = list[a];
+				list[a] = list[b];
+				list[b] = aux; 
 			}
 			if(b1) listLock[a].unlock();
 			if(b2) listLock[b].unlock();
