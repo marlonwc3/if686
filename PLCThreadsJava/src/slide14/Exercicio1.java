@@ -79,7 +79,6 @@ public class Exercicio1{
 	static volatile int N = 1000; 
 	public static SafeList list = new SafeList(N);
 	
-	
 	public static void main(String[] args) {
 		int NumThreads = 100;
 		Vector<T1> threads = new Vector<>();
